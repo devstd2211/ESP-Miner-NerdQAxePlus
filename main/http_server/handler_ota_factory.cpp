@@ -23,7 +23,7 @@
 
 #define FW_START 0x10000
 #ifdef BIGSCREEN_480x320
-// matches partitions-bigscreen.csv (32MB flash)
+// matches partitions-bigscreen.csv
 #define FW_LEN_MB 5
 #else
 #define FW_LEN_MB 4
@@ -31,7 +31,7 @@
 #define FW_LEN_BYTES (FW_LEN_MB * 1024 * 1024)
 
 #ifdef BIGSCREEN_480x320
-#define WWW_START 0x1000000
+#define WWW_START 0xa30000
 #else
 #define WWW_START 0x410000
 #endif

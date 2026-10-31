@@ -1,11 +1,11 @@
 # Name,      Type, SubType,   Offset,    Size, Flags
-# 3.5" (480x320) NerdQAxe++ clones: 32MB flash, larger app slots for the big-screen images.
-# Same layout as the vendor (yysluping B++) factory image, so devices flashed with it can update by OTA.
+# 3.5" (480x320) NerdQAxe++ clones: larger app slots for the big-screen images.
+# Everything stays below 16MB: ESP-IDF's driver for their Boya flash has no 32-bit addressing,
+# writes above 16MB wrap around to 0x0 (the vendor B++ layout with www at 16MB bricks on a www OTA).
 nvs,         data, nvs,       0x9000,    0x6000
 phy_init,    data, phy,       0xf000,    0x1000
-factory,     app,  factory,   0x10000,   5M
-ota_0,       app,  ota_0,     0x510000,  5M
-ota_1,       app,  ota_1,     0xa10000,  5M
-otadata,     data, ota,       0xf10000,  8k
-coredump,    data, coredump,  0xf12000,  64K
-www,         data, spiffs,    0x1000000, 3M
+ota_0,       app,  ota_0,     0x10000,   5M
+ota_1,       app,  ota_1,     0x510000,  5M
+otadata,     data, ota,       0xa10000,  8k
+coredump,    data, coredump,  0xa12000,  64K
+www,         data, spiffs,    0xa30000,  3M
