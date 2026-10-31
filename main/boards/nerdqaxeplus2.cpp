@@ -46,6 +46,20 @@ NerdQaxePlus2::NerdQaxePlus2() : NerdQaxePlus() {
     m_asicMinDifficulty = 512;
     m_asicMinDifficultyDualPool = 256;
 
+#ifdef BIGSCREEN_480x320
+    // 3.5" clone boards: the stock firmware allowed up to 1000 MHz, so use the
+    // same limits as the rev7 profile even when the rev7 regulator is not probed.
+    m_asicFrequencies = {500, 515, 525, 550, 575, 590, 600, 625, 650, 675, 700, 725,
+                         750, 775, 800, 825, 850, 875, 900, 925, 950, 975, 1000};
+    m_asicVoltages = {1120, 1130, 1140, 1150, 1160, 1170, 1180, 1190, 1200, 1210,
+                      1220, 1230, 1240, 1250, 1260, 1270, 1280, 1290, 1300};
+    m_absMaxAsicFrequency = 1000;
+    m_absMaxAsicVoltageMillis = 1300;
+    m_maxPin = 120.0f;
+    m_minPin = 45.0f;
+    m_maxCurrentA = 10.0f;
+#endif
+
 #ifdef NERDQAXEPLUS2
     m_theme = new ThemeNerdqaxeplus2();
 #endif

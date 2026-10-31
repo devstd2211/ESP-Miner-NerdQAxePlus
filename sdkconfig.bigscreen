@@ -1,0 +1,6 @@
+# Layered on sdkconfig.defaults for the BIGSCREEN=1 build (see partitions-bigscreen.csv)
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions-bigscreen.csv"
+CONFIG_PARTITION_TABLE_FILENAME="partitions-bigscreen.csv"
+# CONFIG_ESPTOOLPY_FLASHSIZE_16MB is not set
+CONFIG_ESPTOOLPY_FLASHSIZE_32MB=y
+CONFIG_ESPTOOLPY_FLASHSIZE="32MB"

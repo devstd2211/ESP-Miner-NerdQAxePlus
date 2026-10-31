@@ -22,10 +22,19 @@
 #define GITHUB_REPO "https://github.com/devstd2211/"
 
 #define FW_START 0x10000
+#ifdef BIGSCREEN_480x320
+// matches partitions-bigscreen.csv (32MB flash)
+#define FW_LEN_MB 5
+#else
 #define FW_LEN_MB 4
+#endif
 #define FW_LEN_BYTES (FW_LEN_MB * 1024 * 1024)
 
+#ifdef BIGSCREEN_480x320
+#define WWW_START 0x1000000
+#else
 #define WWW_START 0x410000
+#endif
 #define WWW_LEN_MB 3
 #define WWW_LEN_BYTES (WWW_LEN_MB * 1024 * 1024)
 
@@ -333,7 +342,7 @@ esp_err_t FactoryOTAUpdate::ota_update_from_factory(const char *start_url, bool 
     ESP_LOGI(TAG, "Final URL OK. Content-Length=%lld", (long long) clen);
 
     // Soft check: allow unknown (-1) or ensure at least FW+WWW bytes available.
-    const int64_t min_needed = (int64_t) FW_START + (int64_t) FW_LEN_BYTES + (int64_t) WWW_LEN_BYTES;
+    const int64_t min_needed = (int64_t) WWW_START + (int64_t) WWW_LEN_BYTES;
     if (clen != -1 && clen < min_needed) {
         ESP_LOGE(TAG, "factory image too small: %lld < %lld", (long long) clen, (long long) min_needed);
         setStep(OtaStep::ERROR, "OTA: error");
@@ -369,6 +378,14 @@ esp_err_t FactoryOTAUpdate::ota_update_from_factory(const char *start_url, bool 
             return err;
         }
         ESP_LOGI(TAG, "firmware update successful!");
+
+        // skip the gap between the end of the fw and the www partition (none on the standard layout)
+        err = http_skip_chunks(client, (WWW_START - FW_START - FW_LEN_BYTES) / CHUNK_SIZE);
+        if (err != ESP_OK) {
+            ESP_LOGE(TAG, "error reading stream");
+            POWER_MANAGEMENT_MODULE.restart();
+            return err;
+        }
 
         // Buffer the entire WWW into PSRAM (safer single-partition strategy)
         ESP_LOGI(TAG, "download www binary ...");
